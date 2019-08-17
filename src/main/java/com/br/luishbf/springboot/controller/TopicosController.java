@@ -1,7 +1,6 @@
 package com.br.luishbf.springboot.controller;
 
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,8 @@ public class TopicosController {
 	private TopicoRepository topicoRepository;
 	
 	@RequestMapping("/topicos")
-	public List<TopicoDTO> lista(){
-		List<Topico> topicos = this.topicoRepository.findAll();
+	public List<TopicoDTO> lista(String nomeCurso){
+		List<Topico> topicos = nomeCurso == null ? this.topicoRepository.findAll() : this.topicoRepository.findByCursoNome(nomeCurso);
 		return TopicoDTO.converter(topicos);
 	}
 	
