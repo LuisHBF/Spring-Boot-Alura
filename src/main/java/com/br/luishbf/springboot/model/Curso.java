@@ -1,4 +1,5 @@
-package model;
+package com.br.luishbf.springboot.model;
+
 
 public class Curso {
 

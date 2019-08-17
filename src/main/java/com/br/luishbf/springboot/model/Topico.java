@@ -1,4 +1,5 @@
-package model;
+package com.br.luishbf.springboot.model;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
