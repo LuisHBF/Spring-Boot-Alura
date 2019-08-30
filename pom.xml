@@ -13,7 +13,7 @@
 	<artifactId>springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springboot</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Projeto desenvolvido durante os cursos de Spring Boot da Alura.</description>
 
 	<properties>
 		<java.version>1.8</java.version>
