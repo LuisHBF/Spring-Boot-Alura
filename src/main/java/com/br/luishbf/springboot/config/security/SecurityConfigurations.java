@@ -21,6 +21,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private AutenticacaoService autenticacaoService;
 	
+	@Autowired
+	private TokenService tokenService;
+	
+	
 	@Override
 	@Bean
 	protected AuthenticationManager authenticationManager() throws Exception {
@@ -43,7 +47,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().addFilterBefore(new TokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		.and().addFilterBefore(new TokenFilter(this.tokenService), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	//Configurações de recursos estaticos(js,css,img,etc..)

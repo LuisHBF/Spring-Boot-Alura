@@ -16,8 +16,8 @@ public class TokenService {
 
 
 
-	private static final String SENHAPI = "UMA SENHA MUITO SEGURA!";
-	private static final Long TEMPOJWT = 840000L;
+	private static final String SENHA_API = "UMA SENHA MUITO SEGURA!";
+	private static final Long TEMPO_JWT = 840000L;
 
 	public String gerarToken(Authentication authentication) {
 		Date hoje = new Date();
@@ -26,8 +26,19 @@ public class TokenService {
 				.setIssuer("API do Luizão")
 				.setIssuedAt(hoje)
 				.setSubject(logado.getId().toString())
-				.setExpiration(new Date(hoje.getTime() + TokenService.TEMPOJWT))
-				.signWith(SignatureAlgorithm.HS256, TokenService.SENHAPI)
+				.setExpiration(new Date(hoje.getTime() + TokenService.TEMPO_JWT))
+				.signWith(SignatureAlgorithm.HS256, TokenService.SENHA_API)
 				.compact();
+	}
+
+	public boolean isTokenValido(String token) {
+		try {
+			Jwts.parser().setSigningKey(TokenService.SENHA_API)
+			.parseClaimsJws(token);
+			return true;
+		}catch(Exception e) {
+			return false;
+		}
+
 	}
 }
