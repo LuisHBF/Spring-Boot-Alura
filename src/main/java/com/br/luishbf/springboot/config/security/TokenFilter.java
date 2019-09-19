@@ -1,20 +1,28 @@
 package com.br.luishbf.springboot.config.security;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.br.luishbf.springboot.model.Usuario;
+import com.br.luishbf.springboot.repository.UsuarioRepository;
 
 public class TokenFilter extends OncePerRequestFilter {
 
     private TokenService tokenService;
+    private UsuarioRepository usuarioRepository;
 	
-	public TokenFilter(TokenService tokenService) {
+	public TokenFilter(TokenService tokenService, UsuarioRepository usuarioRepository) {
 		this.tokenService = tokenService;
+		this.usuarioRepository = usuarioRepository;
 	}
 
 	@Override
@@ -23,8 +31,20 @@ public class TokenFilter extends OncePerRequestFilter {
 		
 		String token = this.recuperarToken(request);
 		boolean valido = this.tokenService.isTokenValido(token);
-		System.out.println(valido);
+
+		if(valido)
+			this.autenticarUsuario(token);
+		
+		
 		filterChain.doFilter(request, response);
+		
+	}
+
+	private void autenticarUsuario(String token) {
+		Long idUsuario = this.tokenService.getIdUsuario(token);
+		Optional<Usuario> usuario= this.usuarioRepository.findById(idUsuario);
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario.get(),null,usuario.get().getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 	}
 

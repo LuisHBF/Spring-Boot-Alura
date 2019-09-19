@@ -2,12 +2,12 @@ package com.br.luishbf.springboot.config.security;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.br.luishbf.springboot.model.Usuario;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -17,7 +17,7 @@ public class TokenService {
 
 
 	private static final String SENHA_API = "UMA SENHA MUITO SEGURA!";
-	private static final Long TEMPO_JWT = 840000L;
+	private static final Long TEMPO_JWT = 50000L;
 
 	public String gerarToken(Authentication authentication) {
 		Date hoje = new Date();
@@ -40,5 +40,10 @@ public class TokenService {
 			return false;
 		}
 
+	}
+
+	public Long getIdUsuario(String token) {
+		Claims body = Jwts.parser().setSigningKey(TokenService.SENHA_API).parseClaimsJws(token).getBody();
+		return Long.parseLong(body.getSubject());
 	}
 }
